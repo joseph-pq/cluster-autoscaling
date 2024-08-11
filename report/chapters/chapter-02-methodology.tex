@@ -3,6 +3,19 @@
 The methodology section describes the tools, technologies, and procedures employed in conducting the experiments.
 The evaluation is divided into two parts: the first part involves experimentation on a local computer using Minikube as main tool, while the second part focuses on experimentation within a cloud environment using AWS EKS.
 
-\subsection{Minikube} % Joseph
+\subsection{Minikube procedure}
+% Some introduction
+The following methodology is based on the tutorial \textit{Horizontal Pod Autoscaler Walkthrough}~\cite{KubernetesHpaWalkthrough}, which consists in setting up a deployment on a local computer using Minikube; then, the HPA is configured to scale the deployment based on CPU usage; an external script is used to simulate a load on the deployment; finally, the script is stopped.
+This subsection describes the steps to reproduce the experiment.
 
-\subsection{AWS EKS} % Fabio
+% Step 1: Configuring Kubernetes cluster configuration
+
+
+
+% Procedure
+
+% Description of the computer and software versions
+The computer used for the local experimentations runs a \operatingSystem{} in an \cpuModel{} processor with \cpuCores{} cores and \cpuRam{}~GB of RAM.
+The version of \texttt{minikube} is \minikubeVersion{}, \texttt{kubectl} client is \kubectlClientVersion{}, \texttt{kubectl} server is \kubectlServerVersion{}, and \texttt{kustomize} is \kubectlKustomizeVersion{}.
+
+\subsection{AWS EKS procedure} % Fabio
