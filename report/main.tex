@@ -43,18 +43,13 @@
 \input{chapters/chapter-03-results}
 \input{chapters/chapter-04-conclusion}
 
-% \appendices
-% \section{Proof of the First Zonklar Equation}
-
-
-% % Can use something like this to put references on a page
-% % by themselves when using endfloat and the captionsoff option.
-% \ifCLASSOPTIONcaptionsoff
-%   \newpage
-% \fi
-
 
 \bibliographystyle{IEEEtran}
 \bibliography{references/refs}
+
+\newpage
+\appendices
+\section{Kubernetes Deployment}
+\lstinputlisting[language=bash]{../scripts/php-apache.yaml}
 
 \end{document}
