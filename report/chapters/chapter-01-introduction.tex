@@ -8,3 +8,26 @@
 % - Minikube
 % - Kubectl
 
+Cloud computing is a disruptive way of providing computing resources over the Internet to any other connected device. Cloud computing consists of offering on-demand access to shared resources, such as storage and applications, through data sharing. There are three types of services that the cloud can provide: Infrastructure-as-a-Service (IaaS), Platform-
+as-a-Service (PaaS) and Software-as-a-Service (SaaS)\cite{Prajapati_2018}.
+
+As the cloud computing services demand increases, the more efficient the process needs to be. In this context, clusters play a significant role. Instead of concentrating resources in a supercomputer, clusters a cluster links multiple computers via a high-speed network to distribute the workload. Clustering advantages include high availability, since if one machine breaks the system is not affected due the redundancy of nodes, and load balance, since we can control how the distribute the load between the nodes \cite{Sadashiv_2011}. 
+
+Another key element in cloud computing is the container. Container is known as an application package unit, or a virtualization on a operating system (OS) level \cite{Siddiqui_2019}. It means that containers allow more than one application running in the same machine (node) with an isolated environment, as if it was a separate machine from the OS up, while still sharing the same hardware.
+
+Many modern cloud applications use both conecpts to provision their resources. Instead of clustering the machines, they cluster containers, which increases flexibility on the resource allocation. Kubernetes is one example of container clustering—a popular open-source platform for managing, deploying and scaling container-based applications \cite{Senjab_2023}.
+
+Kubernetes uses lightweight containers to build and decompose applications into small, independent modules known as micro-services, each responsible for a specific task of an application. This architecture allows the managing system to scale the resources for those micro-services based on the demand \cite{Senjab_2023}, a feature known as autoscaling. In Kubernetes, the smallest deployable unit, consisting of one or more co-located containers operating as a single unit, is called a pod.
+
+There are three types of autoscaling methods \cite{Tran_2022} 
+\begin{itemize}
+    \item Horizontal scaling: Increases or decreases the number of pod replicas to share the load. This method defines the maximum load per pod and the minimum and maximum number of allowed pods.
+    \item Vertical scaling: Adjusts resource allocation by redeploying containers with more or fewer resources as the load increases or decreases.
+    \item Hybrid scaling: Combines horizontal and vertical scaling techniques, typically using vertical scaling to optimize resource allocation for a pod and horizontal scaling to replicate pods.
+\end{itemize}
+
+Given the importance of autoscaling, the main goal of this work is to evaluate the performance of Kubernetes horizontal autoscaling within two different frameworks:
+\begin{itemize}
+    \item Amazon EKS: A cloud service offered from Amazon Web Services (AWS) to provide Elastic Container Service for Kubernetes (EKS).
+    \item Minikube: A tool for creating and managing Kubernetes clusters in a single node or machine.
+\end{itemize} 
