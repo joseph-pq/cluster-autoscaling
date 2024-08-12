@@ -27,6 +27,9 @@ The dashboard shows the deployment and service created, as shown in Figure~\ref{
   \label{fig:services}
 \end{figure}
 
+Then, the Horizontal Pod Autoscaler (HPA) is configured to scale the PHP Apache server deployment based on CPU usage.
+
+
 \subsection{AWS EKS results}
 
 After the execution of the commands to test the autoscaler, as outlined in Listing~\ref{lst:autoscaler-test}, The output of this command is presented in Figure~\ref{fig:metrics}.
