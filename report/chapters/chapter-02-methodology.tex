@@ -1,6 +1,7 @@
 \section{Methodology}
 
 This section describes the tools, technologies, and procedures employed in conducting the experiments.
+A Github repository was created to store the scripts and configurations used in the experiments \githubLink{}.
 The evaluation is divided into two parts: the first part involves experimentation on a local computer using Minikube as main tool, while the second part focuses on experimentation within a cloud environment using AWS EKS.
 
 \subsection{Minikube procedure}
@@ -41,6 +42,14 @@ The command in Listing~\ref{lst:kubectl_hpa} creates an HPA that scales the PHP 
 
 
 \subsubsection{Increasing and Decreasing Load}
+To test the HPA, a script is used to simulate a load on the PHP Apache server deployment.
+A command that requests the PHP Apache server is run in a loop to increase the CPU usage.
+The command in Listing~\ref{lst:kubectl_load} runs the script that simulates the load.
+
+\begin{lstlisting}[language=bash, label={lst:kubectl_load},caption={Simulating the load}]
+  kubectl run -i --tty load-generator --rm --image=busybox:1.28 --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://php-apache; done"
+
+\end{lstlisting}
 
 \subsection{AWS EKS procedure}
 
