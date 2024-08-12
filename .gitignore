@@ -1,6 +1,7 @@
 report/build
 report/phase
 report/vars.tex
+report/figures
 report/*.aux
 report/*.fdb_latexmk
 report/*.fls
