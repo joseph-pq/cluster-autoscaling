@@ -53,39 +53,23 @@ The command in Listing~\ref{lst:kubectl_load} runs the script that simulates the
 
 \subsection{AWS EKS procedure}
 
-This subsection outlines the step-by-step procedure to implement a Horizontal Pod Autoscaler (HPA) in an Amazon Elastic Kubernetes Service (EKS) cluster, based on the official AWS tutorial \textit{Horizontal Pod Autoscaler Walkthrough}~\cite{AwsHorizontalPodAutoescaler}.
+This subsection outlines the step-by-step procedure to implement a Horizontal Pod Autoscaler (HPA) in an Amazon Elastic Kubernetes Service (EKS) cluster, based on the official AWS tutorial \textit{Horizontal Pod Autoscaler Walkthrough}~\cite{AwsHorizontalPodAutoescaler}. All commands the was used to execute this procedure are described in Appendix~\ref{appendix:deploy_eks}.
 
 \subsubsection{Environment Setup}
 
-To begin, ensure that your environment is correctly configured. The prerequisites include having the AWS Command Line Interface (CLI) and `kubectl` installed and properly configured. Additionally, ensure that your IAM user or role has the necessary permissions to interact with Amazon EKS.
+To begin, ensure that the environment is correctly configured. The prerequisites include having the AWS Command Line Interface (CLI) and `kubectl` installed and properly configured. Additionally, ensure that the IAM user or role has the necessary permissions to interact with Amazon EKS.
 
-First, verify that your EKS cluster is up and running by using the following command:
+First, verify that the EKS cluster is up and running by updating the kubeconfig. Next, it is essential to deploy the Kubernetes Metrics Server, which is a prerequisite for the Horizontal Pod Autoscaler to function correctly. The Metrics Server collects metrics about resource usage and exposes them to the Kubernetes API server.
 
-\begin{lstlisting}[language=bash]
-aws eks --region us-east-1 update-kubeconfig --name my-cluster
-\end{lstlisting}
-
-Next, it is essential to deploy the Kubernetes Metrics Server, which is a prerequisite for the Horizontal Pod Autoscaler to function correctly. The Metrics Server collects metrics about resource usage and exposes them to the Kubernetes API server.
-
-Deploy the Metrics Server using the following commands:
-
-\begin{lstlisting}[language=bash]
-kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
-\end{lstlisting}
-
-Verify the deployment by checking the status of the Metrics Server:
-
-\begin{lstlisting}[language=bash]
-kubectl get deployment metrics-server -n kube-system
-\end{lstlisting}
+Deploy the Metrics Server and verify the deployment by checking the status of the Metrics Server.
 
 \subsubsection{Deploying a Sample Application}
 
 With the environment set up, the next step is to deploy a sample application that will be scaled by the Horizontal Pod Autoscaler. The AWS tutorial uses a simple PHP-Apache web server application.
 
-Deploy the application using the following command:
+Deploy a sample PHP-Apache web server application:
 
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[language=bash, label={lst:deploy-application}, caption={Deploying PHP application}]
 kubectl apply -f https://k8s.io/examples/application/php-apache.yaml
 \end{lstlisting}
 
@@ -95,50 +79,22 @@ This command applies a YAML file that defines the deployment and service specifi
 
 Once the application is deployed, the next step is to create the Horizontal Pod Autoscaler. The HPA automatically adjusts the number of pods in a deployment based on observed CPU utilization or other select metrics.
 
-Create the HPA using the command:
-
-\begin{lstlisting}[language=bash]
-kubectl autoscale deployment php-apache --cpu-percent=50 --min=1 --max=10
-\end{lstlisting}
-
-In this example, the HPA is configured to maintain the average CPU utilization of the pods in the `php-apache` deployment at 50\%. If the CPU utilization exceeds this target, the HPA will scale up the number of pods, with a minimum of 1 and a maximum of 10 replicas.
+Create the Horizontal Pod Autoscaler for the deployed application, the HPA is configured to maintain the average CPU utilization of the pods in the `php-apache` deployment at 50\%. If the CPU utilization exceeds this target, the HPA will scale up the number of pods, with a minimum of 1 and a maximum of 10 replicas.
 
 \subsubsection{Testing the Autoscaler}
 
 To validate the functionality of the Horizontal Pod Autoscaler, generate a load on the application using the following command:
 
-\begin{lstlisting}[language=bash]
-kubectl run -i --tty load-generator --image=busybox /bin/sh
-while true; do wget -q -O- http://php-apache.default.svc.cluster.local; done
+\begin{lstlisting}[language=bash, label={lst:autoscaler-test}, caption={Autoscaler test}]
+kubectl run -i --tty load-generator --rm --image=busybox --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://php-apache; done"
 \end{lstlisting}
 
-This will continuously send requests to the PHP-Apache application, increasing its CPU usage and triggering the HPA to scale the pods. Monitor the HPA status with:
+This will continuously send requests to the PHP-Apache application, increasing its CPU usage and triggering the HPA to scale the pods. Observe the number of pods to ensure they scale appropriately:
 
-\begin{lstlisting}[language=bash]
-kubectl get hpa
-\end{lstlisting}
-
-Also, observe the number of pods to ensure they scale appropriately:
-
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[language=bash, label={lst:pods-number}, caption={Get the number of pods}]
 kubectl get pods
 \end{lstlisting}
 
 \subsubsection{Verification and Cleanup}
 
 Finally, verify that the Horizontal Pod Autoscaler is functioning as expected by analyzing the HPA status and the number of pods in the deployment. Once the testing is complete, it is important to clean up the resources to avoid unnecessary AWS charges.
-
-Delete the sample application and the HPA using the following commands:
-
-\begin{lstlisting}[language=bash]
-kubectl delete deployment php-apache
-kubectl delete hpa php-apache
-\end{lstlisting}
-
-Additionally, you may want to remove the Metrics Server if it is no longer needed:
-
-\begin{lstlisting}[language=bash]
-kubectl delete -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
-\end{lstlisting}
-
-By following these steps, you will have successfully implemented and tested a Horizontal Pod Autoscaler in an Amazon EKS cluster.
