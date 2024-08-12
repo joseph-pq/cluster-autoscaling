@@ -1,0 +1,34 @@
+\section{EKS Deployment Command List} \label{appendix:deploy_eks}
+
+\begin{lstlisting}[language=bash]
+% Update kubeconfig for EKS cluster
+aws eks --region us-east-1 update-kubeconfig --name my-cluster
+
+% Deploy Metrics Server
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+% Check Metrics Server status
+kubectl get deployment metrics-server -n kube-system
+
+% Deploy PHP-Apache Application
+kubectl apply -f https://k8s.io/examples/application/php-apache.yaml
+
+% Create Horizontal Pod Autoscaler
+kubectl autoscale deployment php-apache --cpu-percent=50 --min=1 --max=10
+
+% Simulate load
+kubectl run -i --tty load-generator --rm --image=busybox --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://php-apache; done"
+
+% Check HPA status
+kubectl get hpa
+
+% Get Pods
+kubectl get pods
+
+% Delete deployment and HPA
+kubectl delete deployment php-apache
+kubectl delete hpa php-apache
+
+% Delete Metrics Server
+kubectl delete -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+\end{lstlisting}
