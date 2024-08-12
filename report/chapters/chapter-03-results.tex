@@ -28,3 +28,21 @@ The dashboard shows the deployment and service created, as shown in Figure~\ref{
 \end{figure}
 
 \subsection{AWS EKS results}
+
+After the execution of the commands to test the autoscaler, as outlined in Listing~\ref{lst:autoscaler-test}, The output of this command is presented in Figure~\ref{fig:metrics}.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.45\textwidth]{figures/test-autoscaler.jpeg}
+  \caption{Test autoscaler on EKS.}
+  \label{fig:test-autoscaler}
+\end{figure}
+
+Next, we allowed approximately 2.5 minutes to elapse before proceeding with the command that displays the number of replicas managed by the autoscaler, as shown in Listing~\ref{lst:pods-number}. The output of this command is presented in Figure~\ref{fig:metrics}, where it is evident that nine replicas of the server were generated in response to the load induced by the test command.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.45\textwidth]{figures/metrics.jpeg}
+  \caption{PHP Apache server metrics.}
+  \label{fig:metrics}
+\end{figure}
