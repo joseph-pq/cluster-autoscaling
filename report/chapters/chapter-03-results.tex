@@ -28,6 +28,31 @@ The dashboard shows the deployment and service created, as shown in Figure~\ref{
 \end{figure}
 
 Then, the Horizontal Pod Autoscaler (HPA) is configured to scale the PHP Apache server deployment based on CPU usage.
+Then, the load test is executed to increase the CPU usage of the PHP Apache server.
+As seen in Figure~\ref{fig:hpa_increasing}, the HPA increases the number of replicas from one to four when the CPU usage exceeds 50\%.
+In Figure~\ref{fig:hpa_max}, the HPA reaches the maximum number of replicas, which is six.
+Finally, after stopping the load test, the CPU usage decreases, and the HPA decreases the number of replicas from six to one, as shown in Figure~\ref{fig:hpa_decreasing}.
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[width=0.45\textwidth]{figures/hpa_increasing.png}
+  \caption{HPA increasing the number of replicas.}
+  \label{fig:hpa_increasing}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[width=0.45\textwidth]{figures/hpa_max.png}
+  \caption{HPA at maximum replicas.}
+  \label{fig:hpa_max}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[width=0.45\textwidth]{figures/hpa_decreasing.png}
+  \caption{HPA decreasing the number of replicas.}
+  \label{fig:hpa_decreasing}
+\end{figure}
 
 
 \subsection{AWS EKS results}
