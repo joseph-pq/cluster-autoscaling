@@ -1,7 +1,8 @@
 \section{Results}
-\subsection{Minikube results}
-After running the commands in Listings~\ref{lst:minikube-cluster}, the Minikube creates a three-node cluster with two worker nodes and one control plane node.
-This is shown in Figure~\ref{fig:minikube-cluster}.
+
+\subsection{Minikube Results}
+
+After executing the commands in Listing~\ref{lst:minikube-cluster}, Minikube successfully creates a three-node cluster, comprising two worker nodes and one control plane node, as illustrated in Figure~\ref{fig:minikube-cluster}.
 
 \begin{figure}[!htbp]
   \centering
@@ -10,8 +11,8 @@ This is shown in Figure~\ref{fig:minikube-cluster}.
   \label{fig:minikube-cluster}
 \end{figure}
 
-After running the commands in Listings~\ref{lst:kubectl_php_apache}, the PHP Apache server is deployed on the Minikube cluster.
-The dashboard shows the deployment and service created, as shown in Figure~\ref{fig:deployments} and Figure~\ref{fig:services}, respectively.
+Following the execution of the commands in Listing~\ref{lst:kubectl_php_apache}, the PHP Apache server is deployed on the Minikube cluster.
+The Kubernetes dashboard confirms the successful creation of the deployment and service, as depicted in Figures~\ref{fig:deployments} and~\ref{fig:services}, respectively.
 
 \begin{figure}[!htbp]
   \centering
@@ -27,11 +28,7 @@ The dashboard shows the deployment and service created, as shown in Figure~\ref{
   \label{fig:services}
 \end{figure}
 
-Then, the Horizontal Pod Autoscaler (HPA) is configured to scale the PHP Apache server deployment based on CPU usage.
-Then, the load test is executed to increase the CPU usage of the PHP Apache server.
-As seen in Figure~\ref{fig:hpa_increasing}, the HPA increases the number of replicas from one to four when the CPU usage exceeds 50\%.
-In Figure~\ref{fig:hpa_max}, the HPA reaches the maximum number of replicas, which is six.
-Finally, after stopping the load test, the CPU usage decreases, and the HPA decreases the number of replicas from six to one, as shown in Figure~\ref{fig:hpa_decreasing}.
+Next, the Horizontal Pod Autoscaler (HPA) is configured to scale the PHP Apache server deployment based on CPU utilization. A load test is then performed to artificially increase the CPU usage of the server. As shown in Figure~\ref{fig:hpa_increasing}, the HPA increases the number of replicas from one to four when CPU usage exceeds 50\%. In Figure~\ref{fig:hpa_max}, the HPA reaches its configured maximum of six replicas. Finally, after the load test is terminated, the CPU usage decreases, prompting the HPA to scale down the number of replicas from six to one, as illustrated in Figure~\ref{fig:hpa_decreasing}.
 
 \begin{figure}[!htbp]
   \centering
@@ -43,7 +40,7 @@ Finally, after stopping the load test, the CPU usage decreases, and the HPA decr
 \begin{figure}[!htbp]
   \centering
   \includegraphics[width=0.45\textwidth]{figures/hpa_max.png}
-  \caption{HPA at maximum replicas.}
+  \caption{HPA scaling to the maximum number of replicas.}
   \label{fig:hpa_max}
 \end{figure}
 
