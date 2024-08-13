@@ -1,54 +1,45 @@
 \section{Methodology}
 
-This section describes the tools, technologies, and procedures employed in conducting the experiments.
-A Github repository was created to store the scripts and configurations used in the experiments \githubLink{}.
-The evaluation is divided into two parts: the first part involves experimentation on a local computer using Minikube as main tool, while the second part focuses on experimentation within a cloud environment using AWS EKS.
+This section outlines the tools, technologies, and procedures utilized to conduct the experiments to evaluate the Horizontal Pod Autoscaler.
+A GitHub repository was established to store the scripts and configurations used in the experiments \githubLink{}.
+The evaluation is divided into two phases: the first involves experimentation on a local computer using Minikube, while the second focuses on experimentation within a cloud environment using AWS EKS.
 
-\subsection{Minikube procedure}
-% Some introduction
-The following methodology is based on the tutorial \textit{Horizontal Pod Autoscaler Walkthrough}~\cite{KubernetesHpaWalkthrough}, which consists in setting up a deployment on a local computer using Minikube; then, the HPA is configured to scale the deployment based on CPU usage; an external script is used to simulate a load on the deployment; finally, the script is stopped.
-This subsection describes the steps to reproduce the experiment.
+\subsection{Minikube Procedure}
 
-% Description of the computer and software versions
-The computer used for the local experimentations runs a \operatingSystem{} in an \cpuModel{} processor with \cpuCores{} cores and \cpuRam{}~GB of RAM.
-The version of \texttt{minikube} is \minikubeVersion{}, \texttt{kubectl} client is \kubectlClientVersion{}, \texttt{kubectl} server is \kubectlServerVersion{}, and \texttt{kustomize} is \kubectlKustomizeVersion{}.
+The methodology is based on the tutorial \textit{Horizontal Pod Autoscaler Walkthrough}~\cite{KubernetesHpaWalkthrough}, which involves setting up a deployment on a local computer using Minikube. The Horizontal Pod Autoscaler (HPA) is then configured to scale the deployment based on CPU usage. An external script is employed to simulate load on the deployment, and subsequently, the script is terminated. This subsection details the steps necessary to reproduce the experiment.
+
+\paragraph{System Specifications.} The local experiments were conducted on a computer running \operatingSystem{}, running in an \cpuModel{} processor featuring \cpuCores{} cores and \cpuRam{}~GB of RAM. The versions of the software tools used are as follows: \texttt{minikube} \minikubeVersion{}, \texttt{kubectl} client \kubectlClientVersion{}, \texttt{kubectl} server \kubectlServerVersion{}, and \texttt{kustomize} \kubectlKustomizeVersion{}.
 
 \subsubsection{Kubernetes Cluster Configuration}
-The experiment is run on a local Kubernetes cluster using Minikube.
-To start the Minikube cluster, run the command from Listing~\ref{lst:minikube-cluster}.
-This command should create three nodes, where two nodes are worker nodes and one node is the control plane.
+
+The experiment was conducted on a local Kubernetes cluster using Minikube. The Minikube cluster is initiated by running the command in Listing~\ref{lst:minikube-cluster}. This command creates a cluster with three nodes: two worker nodes and one control plane node.
 
 \begin{lstlisting}[language=bash, label={lst:minikube-cluster},caption={Starting the Minikube cluster}]
   minikube start --nodes 3 -p multinode --cpus 3 --memory 2048
 \end{lstlisting}
 
 \subsubsection{PHP Apache Server Deployment}
-The next step is to deploy a PHP Apache server on the Minikube cluster.
-This deployment is described in Appendix~\ref{appendix:php_apache}.
-The command in Listing~\ref{lst:kubectl_php_apache} deploys the PHP Apache server on the Minikube cluster.
-The YAML file contains the description of two resources: a deployment that runs a php server from the image \texttt{registry.k8s.io/hpa-example} and a service that exposes the deployment.
+
+The next step is to deploy a PHP Apache server on the Minikube cluster. The deployment is detailed in Appendix~\ref{appendix:php_apache}. The command shown in Listing~\ref{lst:kubectl_php_apache} deploys the PHP Apache server. The YAML file used describes two resources: a deployment that runs a PHP server from the image \texttt{registry.k8s.io/hpa-example} and a service that exposes the deployment.
 
 \begin{lstlisting}[language=bash, label={lst:kubectl_php_apache},caption={Deploying the PHP Apache server}]
   kubectl apply -f https://k8s.io/examples/application/php-apache.yaml
 \end{lstlisting}
 
-\subsubsection{Configuration of Horizontal Pod Autoscaler}
-The Horizontal Pod Autoscaler (HPA) is configured to scale the PHP Apache server deployment based on CPU usage.
-The command in Listing~\ref{lst:kubectl_hpa} creates an HPA that scales the PHP Apache server deployment to maintain an average CPU utilization of 50\%.
+\subsubsection{Horizontal Pod Autoscaler Configuration}
+
+The Horizontal Pod Autoscaler (HPA) is configured to scale the PHP Apache server deployment based on CPU usage. The command in Listing~\ref{lst:kubectl_hpa} creates an HPA that scales the deployment to maintain an average CPU utilization of 50\%.
 
 \begin{lstlisting}[language=bash, label={lst:kubectl_hpa},caption={Configuring the Horizontal Pod Autoscaler}]
   kubectl autoscale deployment php-apache --cpu-percent=50 --min=1 --max=10
 \end{lstlisting}
 
+\subsubsection{Load Testing}
 
-\subsubsection{Increasing and Decreasing Load}
-To test the HPA, a script is used to simulate a load on the PHP Apache server deployment.
-A command that requests the PHP Apache server is run in a loop to increase the CPU usage.
-The command in Listing~\ref{lst:kubectl_load} runs the script that simulates the load.
+To evaluate the HPA, a script is employed to simulate load on the PHP Apache server deployment. The command in Listing~\ref{lst:kubectl_load} runs the script in a loop to increase CPU usage.
 
 \begin{lstlisting}[language=bash, label={lst:kubectl_load},caption={Simulating the load}]
   kubectl run -i --tty load-generator --rm --image=busybox:1.28 --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://php-apache; done"
-
 \end{lstlisting}
 
 \subsection{AWS EKS procedure}
