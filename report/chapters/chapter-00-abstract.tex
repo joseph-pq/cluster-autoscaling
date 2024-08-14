@@ -1,5 +1,10 @@
 \begin{abstract}
-The abstract goes here.
+This study evaluates the performance of Horizontal Pod Autoscaling (HPA) in Kubernetes environments using Minikube and Amazon Elastic Kubernetes Service (EKS).
+Kubernetes is an open-source platform that enables the management and scaling of containerized applications.
+HPA is a key feature that dynamically adjusts the number of pod replicas to handle fluctuating workloads.
+The study compares the autoscaling behavior on Minikube, a local Kubernetes setup, with that on AWS EKS, a cloud-based service, focusing on their ability to scale resources in response to varying CPU loads.
+Experiments involved deploying a PHP-Apache server and applying artificial load to observe HPA's effectiveness.
+Results indicate that both environments successfully scale resources, but with variations in scalability limits, highlighting the trade-offs between local and cloud-based Kubernetes implementations.
 \end{abstract}
 
 % Note that keywords are not normally used for peerreview papers.
